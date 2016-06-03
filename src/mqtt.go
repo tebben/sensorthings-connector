@@ -53,8 +53,7 @@ func (m *MqttClientBase) connect() {
 }
 
 // retryConnect starts a ticker which tries to connect every xx seconds and stops the ticker
-// when a connection is established. This is useful when MQTT Broker and GOST are hosted on the same
-// machine and GOST is started before mosquito
+// when a connection is established.
 func (m *MqttClientBase) retryConnect() {
 	log.Printf("MQTT client %s starting reconnect procedure in background", m.Host)
 
