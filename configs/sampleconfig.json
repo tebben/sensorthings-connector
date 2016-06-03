@@ -1,0 +1,28 @@
+{
+  "pubBroker": {
+    "info": {
+      "host": "tcp://gost.geodan.nl:1883",
+      "username": "",
+      "password": ""
+    }
+  },
+  "subBrokers": [
+    {
+      "info": {
+        "host": "tcp://iot.eclipse.org:1883",
+        "username": "",
+        "password": ""
+      },
+      "streams":[
+        {
+          "topicIn": "Shabam/Sensor1452",
+          "topicOut": "Datastreams(1)/Observations"
+        },
+        {
+          "topicIn": "Shabam/Sensor1337",
+          "topicOut": "Datastreams(2)/Observations"
+        }
+      ]
+    }
+  ]
+}
