@@ -5,7 +5,7 @@
   "PingTimeout": 20,
   "pubBroker": {
     "info": {
-      "host": "tcp://gost.geodan.nl:1883",
+      "host": "tcp://sensorthingsbrokerhostname:1883",
       "username": "",
       "password": ""
     }
@@ -13,13 +13,13 @@
   "subBrokers": [
     {
       "info": {
-        "host": "tcp://87.249.108.125:1883",
-        "username": "haarlem",
-        "password": "Hrl0510_t"
+        "host": "tcp://listeningbrokerhostname:1883",
+        "username": "barry",
+        "password": "soep"
       },
       "streams":[
         {
-          "topicIn": "haarlem/sensoren/403300944/TCA",
+          "topicIn": "AwesomeSensor/403300944/TCA",
           "topicOut": "GOST/Datastreams(9)/Observations",
           "mapping": {
             "value": {
@@ -32,7 +32,7 @@
           }
         },
         {
-          "topicIn": "haarlem/sensoren/403300944/NO2",
+          "topicIn": "AwesomeSensor/403300944/NO2",
           "topicOut": "GOST/Datastreams(8)/Observations",
           "mapping": {
             "value": {
@@ -45,7 +45,7 @@
           }
         },
         {
-          "topicIn": "haarlem/sensoren/403300944/HUMA",
+          "topicIn": "AwesomeSensor/403300944/HUMA",
           "topicOut": "GOST/Datastreams(5)/Observations",
           "mapping": {
             "value": {
