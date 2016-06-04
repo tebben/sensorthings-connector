@@ -1,44 +1,83 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
+	"strconv"
 
 	paho "github.com/eclipse/paho.mqtt.golang"
 )
 
+// MqttSubClient is the implementation of the subscription client, the subscription client
+// will connect to a broker where messages can be received
 type MqttSubClient struct {
 	MqttClientBase
 	Streams []Stream
 }
 
-func CreateSubClient(host string, streams []Stream, clientID, username, password string) MqttSubClient {
+// CreateSubClient instantiates a MqttSubClient
+func CreateSubClient(host string, qos byte, streams []Stream, clientID string, channel chan *PublishMessage, username, password string) MqttSubClient {
 	subClient := MqttSubClient{}
-	subClient.Host = host
+	subClient.SetClientBase(host, qos, clientID, channel, username, password)
 	subClient.Streams = streams
-	subClient.Username = username
-	subClient.Password = password
-	subClient.Connecting = false
-	subClient.Client = CreatePahoClient(host, clientID, username, password)
-
 	return subClient
 }
 
+// Start will start the subscription client by connecting and subscribing on topics
 func (m *MqttSubClient) Start() {
 	log.Printf("Starting MQTT subscription client on %s", m.Host)
 	m.connect()
 
 	if len(m.Streams) > 0 {
-		for _, s := range m.Streams {
-			if token := m.Client.Subscribe(s.IncomingTopic, 0, func(client paho.Client, msg paho.Message) {
-				go m.handleIncomingMessage(msg.Topic(), msg.Payload(), s.OutgoingTopic)
+		for idx, s := range m.Streams {
+			st := m.Streams[idx]
+			if token := m.Client.Subscribe(s.IncomingTopic, m.Qos, func(client paho.Client, msg paho.Message) {
+				go m.handleIncomingMessage(msg.Topic(), msg.Payload(), st.Mapping, st.OutgoingTopic)
 			}); token.Wait() && token.Error() != nil {
-				fmt.Println(token.Error())
+				log.Print(token.Error())
 			}
 		}
 	}
 }
 
-func (m *MqttSubClient) handleIncomingMessage(topic string, payload []byte, outgoingTopic string) {
-	log.Printf("Topic: %v, Msg, %v CONVERTING MESSAGE TO SENSORTHINGS", topic, string(payload[:]))
+// handleIncomingMessage handles an incoming message by converting the payload into a message thet can be used in a
+// SensorThings server and sending it over the PublishChannel to the publish client
+func (m *MqttSubClient) handleIncomingMessage(topic string, payload []byte, mapping map[string]ToValue, outgoingTopic string) {
+	if len(mapping) == 0 {
+		return
+	}
+
+	var msg map[string]interface{}
+	err := json.Unmarshal(payload, &msg)
+	if err != nil {
+		return
+	}
+
+	o := &Observation{}
+	for k, v := range mapping {
+		incVal, ok := msg[k]
+		if ok {
+			switch v.Name {
+			case "result":
+				{
+					if v.ToFloat {
+						iValue, err := strconv.ParseFloat(incVal.(string), 64)
+						if err == nil {
+							o.Result = iValue
+						} else {
+							o.Result = incVal
+						}
+					} else {
+						o.Result = incVal
+					}
+				}
+			case "phenomenonTime":
+				{
+					o.PhenomenonTime = incVal.(string)
+				}
+			}
+		}
+	}
+
+	m.PublishChannel <- &PublishMessage{Topic: outgoingTopic, Observation: o}
 }

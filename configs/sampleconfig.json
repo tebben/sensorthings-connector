@@ -1,4 +1,8 @@
 {
+  "ClientId": "sensorthings-connector",
+  "qos": 1,
+  "keepAlive": 300,
+  "PingTimeout": 20,
   "pubBroker": {
     "info": {
       "host": "tcp://gost.geodan.nl:1883",
@@ -9,18 +13,49 @@
   "subBrokers": [
     {
       "info": {
-        "host": "tcp://iot.eclipse.org:1883",
-        "username": "",
-        "password": ""
+        "host": "tcp://87.249.108.125:1883",
+        "username": "haarlem",
+        "password": "Hrl0510_t"
       },
       "streams":[
         {
-          "topicIn": "Shabam/Sensor1452",
-          "topicOut": "Datastreams(1)/Observations"
+          "topicIn": "haarlem/sensoren/403300944/TCA",
+          "topicOut": "GOST/Datastreams(9)/Observations",
+          "mapping": {
+            "value": {
+              "name": "result",
+              "toFloat": true
+            },
+            "datetime": {
+              "name": "phenomenonTime"
+            }
+          }
         },
         {
-          "topicIn": "Shabam/Sensor1337",
-          "topicOut": "Datastreams(2)/Observations"
+          "topicIn": "haarlem/sensoren/403300944/NO2",
+          "topicOut": "GOST/Datastreams(8)/Observations",
+          "mapping": {
+            "value": {
+              "name": "result",
+              "toFloat": true
+            },
+            "datetime": {
+              "name": "phenomenonTime"
+            }
+          }
+        },
+        {
+          "topicIn": "haarlem/sensoren/403300944/HUMA",
+          "topicOut": "GOST/Datastreams(5)/Observations",
+          "mapping": {
+            "value": {
+              "name": "result",
+              "toFloat": true
+            },
+            "datetime": {
+              "name": "phenomenonTime"
+            }
+          }
         }
       ]
     }

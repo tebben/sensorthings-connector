@@ -2,18 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"time"
 )
 
-const ClientID = "sensorthings-connector"
-
-var publishBroker MqttPubClient
-var subscribeBrokers []MqttSubClient
-
 func main() {
-	cfgFlag := flag.String("config", "sampleconfig.json", "path of the config file")
+	cfgFlag := flag.String("config", "../configs/sampleconfig.json", "path of the config file")
 	flag.Parse()
 	cfg := *cfgFlag
 
@@ -23,23 +17,28 @@ func main() {
 		return
 	}
 
-	createBrokerClients(c)
+	start(c)
 
-	// keep alive method for now
-	t := time.NewTicker(15 * time.Minute)
-	for now := range t.C {
-		fmt.Sprintf("tick: %v", now)
-	}
+	go forever()
+	select {} // block forever
 }
 
-func createBrokerClients(c Config) {
-	publishBroker = CreatePubClient(c.PubBroker.Info.Host, ClientID, c.PubBroker.Info.Username, c.PubBroker.Info.Password)
+func start(c Config) {
+	publishChannel := make(chan *PublishMessage)
+	publishBroker := CreatePubClient(c.PubBroker.Info.Host, c.Qos, c.ClientID, publishChannel, c.PubBroker.Info.Username, c.PubBroker.Info.Password)
 	publishBroker.Start()
 
+	subscribeBrokers := []MqttSubClient{}
 	for _, sb := range c.SubBrokers {
-		subCient := CreateSubClient(sb.Info.Host, sb.Streams, ClientID, sb.Info.Username, sb.Info.Password)
+		subCient := CreateSubClient(sb.Info.Host, c.Qos, sb.Streams, c.ClientID, publishChannel, sb.Info.Username, sb.Info.Password)
 		subCient.Start()
 
 		subscribeBrokers = append(subscribeBrokers, subCient)
+	}
+}
+
+func forever() {
+	for {
+		time.Sleep(time.Second)
 	}
 }
