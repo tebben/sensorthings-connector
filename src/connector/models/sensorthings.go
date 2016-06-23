@@ -1,4 +1,4 @@
-package main
+package models
 
 // PublishMessage is used to publish a message trough the PubClient.
 // When a subscription client receives a message it will be transformed into a PublishMessage
@@ -9,7 +9,7 @@ type PublishMessage struct {
 }
 
 // Observation in SensorThings represents a single Sensor reading of an ObservedProperty. A physical device, a Sensor, sends
-// Observations to a specified Datastream. An Observation requires a FeaturOfInterest entity, if none is provided in the request,
+// Observations to a specified Datastream. An Observation requires a FeatureOfInterest entity, if none is provided in the request,
 // the Location of the Thing associated with the Datastream, will be assigned to the new Observation as the FeaturOfInterest.
 type Observation struct {
 	PhenomenonTime    string                 `json:"phenomenonTime,omitempty"`

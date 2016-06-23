@@ -1,8 +1,9 @@
-package main
+package mqtt
 
 import (
-	"log"
 	"encoding/json"
+	"github.com/tebben/sensorthings-connector/src/connector/models"
+	"log"
 )
 
 // MqttPubClient is the implementation of the publish client, the publish client
@@ -12,7 +13,7 @@ type MqttPubClient struct {
 }
 
 // CreatePubClient instantiates a MqttPubClient
-func CreatePubClient(host string, qos byte, clientID string, channel chan *PublishMessage, username, password string) MqttPubClient {
+func CreatePubClient(host string, qos byte, clientID string, channel chan *models.PublishMessage, username, password string) MqttPubClient {
 	pubClient := MqttPubClient{}
 	pubClient.SetClientBase(host, qos, clientID, channel, username, password)
 	return pubClient
@@ -31,7 +32,7 @@ func (m *MqttPubClient) listen() {
 		pm := <-m.PublishChannel
 		if !m.Connecting {
 			jsonString, err := json.Marshal(pm.Observation)
-			if(err != nil){
+			if err != nil {
 				log.Printf("Error marshalling observation: %v", err.Error())
 			}
 

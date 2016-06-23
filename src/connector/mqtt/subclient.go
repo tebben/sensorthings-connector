@@ -1,4 +1,4 @@
-package main
+package mqtt
 
 import (
 	"encoding/json"
@@ -6,17 +6,18 @@ import (
 	"strconv"
 
 	paho "github.com/eclipse/paho.mqtt.golang"
+	"github.com/tebben/sensorthings-connector/src/connector/models"
 )
 
 // MqttSubClient is the implementation of the subscription client, the subscription client
 // will connect to a broker where messages can be received
 type MqttSubClient struct {
 	MqttClientBase
-	Streams []Stream
+	Streams []models.Stream
 }
 
 // CreateSubClient instantiates a MqttSubClient
-func CreateSubClient(host string, qos byte, streams []Stream, clientID string, channel chan *PublishMessage, username, password string) MqttSubClient {
+func CreateSubClient(host string, qos byte, streams []models.Stream, clientID string, channel chan *models.PublishMessage, username, password string) MqttSubClient {
 	subClient := MqttSubClient{}
 	subClient.SetClientBase(host, qos, clientID, channel, username, password)
 	subClient.Streams = streams
@@ -42,7 +43,7 @@ func (m *MqttSubClient) Start() {
 
 // handleIncomingMessage handles an incoming message by converting the payload into a message thet can be used in a
 // SensorThings server and sending it over the PublishChannel to the publish client
-func (m *MqttSubClient) handleIncomingMessage(topic string, payload []byte, mapping map[string]ToValue, outgoingTopic string) {
+func (m *MqttSubClient) handleIncomingMessage(topic string, payload []byte, mapping map[string]models.ToValue, outgoingTopic string) {
 	if len(mapping) == 0 {
 		return
 	}
@@ -53,7 +54,7 @@ func (m *MqttSubClient) handleIncomingMessage(topic string, payload []byte, mapp
 		return
 	}
 
-	o := &Observation{}
+	o := &models.Observation{}
 	for k, v := range mapping {
 		incVal, ok := msg[k]
 		if ok {
@@ -79,5 +80,5 @@ func (m *MqttSubClient) handleIncomingMessage(topic string, payload []byte, mapp
 		}
 	}
 
-	m.PublishChannel <- &PublishMessage{Topic: outgoingTopic, Observation: o}
+	m.PublishChannel <- &models.PublishMessage{Topic: outgoingTopic, Observation: o}
 }

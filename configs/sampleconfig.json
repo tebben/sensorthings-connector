@@ -1,63 +1,14 @@
 {
-  "ClientId": "sensorthings-connector",
-  "qos": 1,
-  "keepAlive": 300,
-  "PingTimeout": 20,
-  "pubBroker": {
-    "info": {
-      "host": "tcp://sensorthingsbrokerhostname:1883",
+  "httpHost": "0.0.0.0:8081",
+  "publishClient": {
+    "clientId": "stconnector",
+    "qos": 1,
+    "keepAlive": 300,
+    "pingTimeout": 20
+  },
+  "publishBroker": {
+      "host": "tcp://gost.geodan.nl:1883",
       "username": "",
       "password": ""
-    }
-  },
-  "subBrokers": [
-    {
-      "info": {
-        "host": "tcp://listeningbrokerhostname:1883",
-        "username": "barry",
-        "password": "soep"
-      },
-      "streams":[
-        {
-          "topicIn": "AwesomeSensor/403300944/TCA",
-          "topicOut": "GOST/Datastreams(9)/Observations",
-          "mapping": {
-            "value": {
-              "name": "result",
-              "toFloat": true
-            },
-            "datetime": {
-              "name": "phenomenonTime"
-            }
-          }
-        },
-        {
-          "topicIn": "AwesomeSensor/403300944/NO2",
-          "topicOut": "GOST/Datastreams(8)/Observations",
-          "mapping": {
-            "value": {
-              "name": "result",
-              "toFloat": true
-            },
-            "datetime": {
-              "name": "phenomenonTime"
-            }
-          }
-        },
-        {
-          "topicIn": "AwesomeSensor/403300944/HUMA",
-          "topicOut": "GOST/Datastreams(5)/Observations",
-          "mapping": {
-            "value": {
-              "name": "result",
-              "toFloat": true
-            },
-            "datetime": {
-              "name": "phenomenonTime"
-            }
-          }
-        }
-      ]
-    }
-  ]
+  }
 }

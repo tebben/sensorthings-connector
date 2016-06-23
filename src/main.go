@@ -3,42 +3,38 @@ package main
 import (
 	"flag"
 	"log"
-	"time"
+
+	"github.com/tebben/sensorthings-connector/src/connector/config"
+	"github.com/tebben/sensorthings-connector/src/connector/http"
+	"github.com/tebben/sensorthings-connector/src/connector/modules/mqtt"
+	"github.com/tebben/sensorthings-connector/src/connector/modules/netatmo"
+	"github.com/tebben/sensorthings-connector/src/connector/system"
 )
 
 func main() {
-	cfgFlag := flag.String("config", "../configs/sampleconfig.json", "path of the config file")
+	cfgFlag := flag.String("config", "configs/sampleconfig.json", "path of the config file")
 	flag.Parse()
 	cfg := *cfgFlag
 
-	c, err := GetConfig(cfg)
+	c, err := config.GetConfig(cfg)
 	if err != nil {
 		log.Fatal("config read error: ", err)
 		return
 	}
 
 	start(c)
-
-	go forever()
-	select {} // block forever
 }
 
-func start(c Config) {
-	publishChannel := make(chan *PublishMessage)
-	publishBroker := CreatePubClient(c.PubBroker.Info.Host, c.Qos, c.ClientID, publishChannel, c.PubBroker.Info.Username, c.PubBroker.Info.Password)
-	publishBroker.Start()
+func start(c config.Config) {
+	system := system.CreateSystem(c)
 
-	subscribeBrokers := []MqttSubClient{}
-	for _, sb := range c.SubBrokers {
-		subCient := CreateSubClient(sb.Info.Host, c.Qos, sb.Streams, c.ClientID, publishChannel, sb.Info.Username, sb.Info.Password)
-		subCient.Start()
+	//---ADD MODULES HERE---//
+	system.AddModule(&mqtt.MQTTModule{})
+	system.AddModule(&netatmo.NetatmoModule{})
+	//----------------------//
 
-		subscribeBrokers = append(subscribeBrokers, subCient)
-	}
-}
+	system.Start()
 
-func forever() {
-	for {
-		time.Sleep(time.Second)
-	}
+	connectorServer := http.CreateServer(&system, c.HttpHost, system.GetEndpoints())
+	connectorServer.Start()
 }

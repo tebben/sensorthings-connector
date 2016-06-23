@@ -1,10 +1,11 @@
-package main
+package mqtt
 
 import (
 	"log"
 	"time"
 
 	paho "github.com/eclipse/paho.mqtt.golang"
+	"github.com/tebben/sensorthings-connector/src/connector/models"
 )
 
 // MqttClient defines the needed methods to control our MQTT client
@@ -24,11 +25,11 @@ type MqttClientBase struct {
 	Username       string
 	Password       string
 	Connecting     bool
-	PublishChannel chan *PublishMessage
+	PublishChannel chan *models.PublishMessage
 }
 
 // SetClientBase sets the base parameters needed for our MQTT client and creates the MQTT client
-func (m *MqttClientBase) SetClientBase(host string, qos byte, clientID string, channel chan *PublishMessage, username, password string) {
+func (m *MqttClientBase) SetClientBase(host string, qos byte, clientID string, channel chan *models.PublishMessage, username, password string) {
 	m.Qos = qos
 	m.Host = host
 	m.Username = username
