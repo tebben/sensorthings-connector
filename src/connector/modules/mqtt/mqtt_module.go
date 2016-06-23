@@ -31,7 +31,7 @@ func (mq *MQTTModule) Setup() {
 func (mq *MQTTModule) Start() {
 	mq.subClients = []connectorMQTT.MqttSubClient{}
 	for _, sb := range mq.settings.SubBrokers {
-		subClient := connectorMQTT.CreateSubClient(sb.Host, sb.QOS, sb.Streams, sb.ClientID, mq.PublishChannel, sb.Username, sb.Password)
+		subClient := connectorMQTT.CreateSubClient(sb.Host, sb.QOS, sb.Streams, sb.ClientID, mq.PublishChannel, sb.Username, sb.Password, 300, 20)
 		subClient.Start()
 
 		mq.subClients = append(mq.subClients, subClient)

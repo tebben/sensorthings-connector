@@ -24,18 +24,22 @@ type MqttClientBase struct {
 	Host           string
 	Username       string
 	Password       string
+	KeepAlive      time.Duration
+	PingTimeout    time.Duration
 	Connecting     bool
 	PublishChannel chan *models.PublishMessage
 }
 
 // SetClientBase sets the base parameters needed for our MQTT client and creates the MQTT client
-func (m *MqttClientBase) SetClientBase(host string, qos byte, clientID string, channel chan *models.PublishMessage, username, password string) {
+func (m *MqttClientBase) SetClientBase(host string, qos byte, clientID string, channel chan *models.PublishMessage, username string, password string, keepAlive time.Duration, pingTimeout time.Duration) {
 	m.Qos = qos
 	m.Host = host
 	m.Username = username
 	m.Password = password
+	m.KeepAlive = keepAlive
+	m.PingTimeout = pingTimeout
 	m.Connecting = false
-	m.Client = createPahoClient(host, clientID, username, password)
+	m.Client = createPahoClient(host, clientID, username, password, keepAlive, pingTimeout)
 	m.PublishChannel = channel
 }
 
@@ -73,10 +77,10 @@ func (m *MqttClientBase) retryConnect() {
 }
 
 // createPahoClient creates a new paho client
-func createPahoClient(host string, clientID string, username string, password string) paho.Client {
+func createPahoClient(host string, clientID string, username string, password string, keepAlive time.Duration, pingTimeout time.Duration) paho.Client {
 	opts := paho.NewClientOptions().AddBroker(host).SetClientID(clientID)
-	opts.SetKeepAlive(300 * time.Second)
-	opts.SetPingTimeout(20 * time.Second)
+	opts.SetKeepAlive(keepAlive * time.Second)
+	opts.SetPingTimeout(pingTimeout * time.Second)
 	opts.SetAutoReconnect(true)
 	opts.SetConnectionLostHandler(func(client paho.Client, err error) {
 		connectionLostHandler(client, err, host)

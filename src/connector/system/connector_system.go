@@ -27,7 +27,7 @@ type SensorThingsConnector struct {
 // CreateSystem initialises a new SensorThings System
 func CreateSystem(config config.Config) models.System {
 	pubChan := make(chan *models.PublishMessage)
-	pubClient := mqtt.CreatePubClient(config.PubBroker.Host, config.PubClient.Qos, config.PubClient.ClientID, pubChan, config.PubBroker.Username, config.PubBroker.Password)
+	pubClient := mqtt.CreatePubClient(config.PubBroker.Host, config.PubClient.Qos, config.PubClient.ClientID, pubChan, config.PubBroker.Username, config.PubBroker.Password, config.PubClient.KeepAlive, config.PubClient.PingTimeOut)
 
 	return &SensorThingsConnector{
 		typeRegistry: make(map[string]reflect.Type, 0),

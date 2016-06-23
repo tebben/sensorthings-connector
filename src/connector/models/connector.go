@@ -98,12 +98,12 @@ func (c *ConnectorBase) GetModule() ConnectorModule {
 
 // Start wil start running the connector
 func (c *ConnectorBase) Start() {
-	c.GetModule().Start()
+	go c.GetModule().Start()
 	c.Running = true
 }
 
 // Stop will stop the connector
 func (c *ConnectorBase) Stop() {
-	c.GetModule().Stop()
+	go c.GetModule().Stop()
 	c.Running = false
 }

@@ -7,6 +7,7 @@ import (
 
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"github.com/tebben/sensorthings-connector/src/connector/models"
+	"time"
 )
 
 // MqttSubClient is the implementation of the subscription client, the subscription client
@@ -17,9 +18,9 @@ type MqttSubClient struct {
 }
 
 // CreateSubClient instantiates a MqttSubClient
-func CreateSubClient(host string, qos byte, streams []models.Stream, clientID string, channel chan *models.PublishMessage, username, password string) MqttSubClient {
+func CreateSubClient(host string, qos byte, streams []models.Stream, clientID string, channel chan *models.PublishMessage, username string, password string, keepAlive time.Duration, pingTimeout time.Duration) MqttSubClient {
 	subClient := MqttSubClient{}
-	subClient.SetClientBase(host, qos, clientID, channel, username, password)
+	subClient.SetClientBase(host, qos, clientID, channel, username, password, keepAlive, pingTimeout)
 	subClient.Streams = streams
 	return subClient
 }

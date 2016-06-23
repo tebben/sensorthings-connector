@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 // PubClient defines the publish paho client that sends to the SubBroker
 //   ClientID: the name used to connect to the publish and subscription brokers
 //   Qos: quality of service, used when pubbing and subbing, defaults to 0
@@ -11,10 +13,10 @@ package models
 //	will wait after sending a PING request to the broker, before deciding
 //	that the connection has been lost
 type PubClient struct {
-	ClientID    string `json:"clientId"`
-	Qos         byte   `json:"qos"`
-	KeepAlive   int    `json:"keepAlive"`
-	PingTimeOut int    `json:"pingTimeout"`
+	ClientID    string        `json:"clientId"`
+	Qos         byte          `json:"qos"`
+	KeepAlive   time.Duration `json:"keepAlive"`
+	PingTimeOut time.Duration `json:"pingTimeout"`
 }
 
 // PubBroker defines the publish broker where the incoming messages will be published to

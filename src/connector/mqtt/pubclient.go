@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/tebben/sensorthings-connector/src/connector/models"
 	"log"
+	"time"
 )
 
 // MqttPubClient is the implementation of the publish client, the publish client
@@ -13,16 +14,16 @@ type MqttPubClient struct {
 }
 
 // CreatePubClient instantiates a MqttPubClient
-func CreatePubClient(host string, qos byte, clientID string, channel chan *models.PublishMessage, username, password string) MqttPubClient {
+func CreatePubClient(host string, qos byte, clientID string, channel chan *models.PublishMessage, username string, password string, keepAlive time.Duration, pingTimeout time.Duration) MqttPubClient {
 	pubClient := MqttPubClient{}
-	pubClient.SetClientBase(host, qos, clientID, channel, username, password)
+	pubClient.SetClientBase(host, qos, clientID, channel, username, password, keepAlive, pingTimeout)
 	return pubClient
 }
 
 // Start will start the publish client by connecting and start listening on the PublishChannel
 func (m *MqttPubClient) Start() {
 	log.Printf("Starting MQTT publish client on %s", m.Host)
-	m.connect()
+	go m.connect()
 	go m.listen()
 }
 
@@ -38,7 +39,6 @@ func (m *MqttPubClient) listen() {
 
 			token := m.Client.Publish(pm.Topic, m.Qos, false, jsonString)
 			token.Wait()
-
 		}
 	}
 }
