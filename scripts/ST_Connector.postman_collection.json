@@ -7,6 +7,8 @@
 		"4cda53d4-2232-2654-925f-c1b7501145ac",
 		"54ee53df-90bf-5f08-cb43-7fc25fc7f7de",
 		"fd87cd95-676b-3dce-fb0c-96406a1a9d87",
+		"de76bc22-a288-cca2-ac28-42f58fa2ef8e",
+		"7961c2f7-afc7-f03f-3e83-24c74ef7f75a",
 		"5dadae0b-c6d1-d089-40f8-048f4f1e237e",
 		"66196603-9751-6b44-45c5-8fc287bbcabd",
 		"6697ed4e-6104-8333-6355-41fa2a0409d4",
@@ -14,7 +16,7 @@
 	],
 	"folders": [],
 	"timestamp": 1466585811665,
-	"owner": "",
+	"owner": 0,
 	"remoteLink": "",
 	"public": false,
 	"requests": [
@@ -139,6 +141,26 @@
 			"rawModeData": ""
 		},
 		{
+			"id": "7961c2f7-afc7-f03f-3e83-24c74ef7f75a",
+			"headers": "Accept: application/json\nContent-Type: application/json\n",
+			"url": "http://localhost:8081/Connectors",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1466755837995,
+			"name": "CREATE Connector BeeClear",
+			"description": "",
+			"collectionId": "2e6e83c3-72c5-c3df-a1f8-38f8daf48e0b",
+			"responses": [],
+			"rawModeData": "{\r\n    \"name\": \"BeeClear connector 1\",\r\n    \"description\": \"My BeeClear connector\",\r\n    \"module\": \"BeeClear\",\r\n    \"settings\": {\r\n        \"bcHost\": \"http://10.0.0.40/beeclear\",\r\n        \"FetchInterval\": 10,\r\n        \"mappings\": [\r\n            {\r\n                \"dataType\": \"u\",\r\n                \"publishTopic\": \"GOST/Datastreams(2)/Observations\"\r\n            }\r\n        ]\r\n    }\r\n}"
+		},
+		{
 			"id": "89e6226c-4ef6-7ebb-bcdb-b13ba66e82db",
 			"headers": "Accept: application/json\nContent-Type: application/json\n",
 			"url": "http://localhost:8081/Connectors/XVlBzgba/Stop",
@@ -159,6 +181,26 @@
 			"rawModeData": ""
 		},
 		{
+			"id": "de76bc22-a288-cca2-ac28-42f58fa2ef8e",
+			"headers": "Accept: application/json\nContent-Type: application/json\n",
+			"url": "http://localhost:8081/Connectors",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1466754811714,
+			"name": "CREATE Connector Netatmo",
+			"description": "",
+			"collectionId": "2e6e83c3-72c5-c3df-a1f8-38f8daf48e0b",
+			"responses": [],
+			"rawModeData": "{\r\n    \"name\": \"Netatmo VZ connector\",\r\n    \"description\": \"Geodan VZ Netatmo readings connector\",\r\n    \"module\": \"Netatmo\",\r\n    \"settings\": {\r\n        \"clientId\": \"myid\",\r\n        \"clientSecret\": \"mysecret\",\r\n        \"username\": \"barry\",\r\n        \"password\": \"batsbak\",\r\n        \"mappings\": [\r\n            {\r\n                \"moduleId\": \"70:ee:50:03:65:d4\",\r\n                \"dataType\": \"Temperature\",\r\n                \"publishTopic\": \"GOST/Datastreams(11)/Observations\"\r\n            },\r\n            {\r\n                \"moduleId\": \"70:ee:50:03:65:d4\",\r\n                \"dataType\": \"CO2\",\r\n                \"publishTopic\": \"GOST/Datastreams(12)/Observations\"\r\n            }\r\n        ]\r\n    }\r\n}"
+		},
+		{
 			"id": "fd87cd95-676b-3dce-fb0c-96406a1a9d87",
 			"headers": "Accept: application/json\nContent-Type: application/json\n",
 			"url": "http://localhost:8081/Connectors",
@@ -171,12 +213,12 @@
 			"tests": "",
 			"currentHelper": "normal",
 			"helperAttributes": {},
-			"time": 1466680918790,
-			"name": "CREATE Connector",
+			"time": 1466688115487,
+			"name": "CREATE Connector MQTT",
 			"description": "",
 			"collectionId": "2e6e83c3-72c5-c3df-a1f8-38f8daf48e0b",
 			"responses": [],
-			"rawModeData": "{\r\n    \"name\": \"Test connector\",\r\n    \"description\": \"Connect a MQTT stream to a SensorThings server\",\r\n    \"module\": \"MQTT\",\r\n    \"settings\": {\r\n    }\r\n}"
+			"rawModeData": "{\r\n    \"name\": \"MQTT connector\",\r\n    \"description\": \"Connect a MQTT stream to a SensorThings server\",\r\n    \"module\": \"MQTT\",\r\n    \"settings\": {\r\n        \"subBrokers\": [\r\n        {\r\n          \"host\": \"tcp://mybroker:1883\",\r\n          \"username\": \"\",\r\n          \"password\": \"\",\r\n          \"streams\": [\r\n            {\r\n              \"topicIn\": \"Test/1\",\r\n              \"topicOut\": \"GOST/Datastreams(11)/Observations\",\r\n              \"mapping\": {\r\n                \"value\": {\r\n                  \"name\": \"result\",\r\n                  \"toFloat\": true\r\n                },\r\n                \"datetime\": {\r\n                  \"name\": \"phenomenonTime\"\r\n                }\r\n              }\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n}"
 		}
 	]
 }
