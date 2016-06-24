@@ -126,4 +126,66 @@ Settings example when creating a connector using the MQTT module
 ]
 ```
 ### Netatmo
+Netatmo can be used to connect a Netatmo Weather Station to the SensorThings broker.
+
+Settings example when creating a connector using the Netatmo module
+```
+{
+    "name": "Netatmo VZ connector",
+    "description": "Geodan VZ Netatmo readings connector",
+    "module": "Netatmo",
+    "settings": {
+        "fetchIntervalSeconds": 600
+        "clientId": "",
+        "clientSecret": "",
+        "username": "",
+        "password": "",
+        "mappings": [
+            {
+                "moduleId": "70:ee:50:03:65:d4",
+                "dataType": "Temperature",
+                "publishTopic": "GOST/Datastreams(3)/Observations"
+            },
+            {
+                "moduleId": "70:ee:50:03:65:d4",
+                "dataType": "Humidity",
+                "publishTopic": "GOST/Datastreams(4)/Observations"
+            },
+            {
+                "moduleId": "70:ee:50:03:65:d4",
+                "dataType": "Pressure",
+                "publishTopic": "GOST/Datastreams(5)/Observations"
+            },
+            {
+                "moduleId": "70:ee:50:03:65:d4",
+                "dataType": "CO2",
+                "publishTopic": "GOST/Datastreams(6)/Observations"
+            },
+            {
+                "moduleId": "70:ee:50:03:65:d4",
+                "dataType": "Noise",
+                "publishTopic": "GOST/Datastreams(7)/Observations"
+            },
+            {
+                "moduleId": "02:00:00:03:5d:52",
+                "dataType": "Temperature",
+                "publishTopic": "GOST/Datastreams(8)/Observations"
+            },
+            {
+                "moduleId": "02:00:00:03:5d:52",
+                "dataType": "Humidity",
+                "publishTopic": "GOST/Datastreams(9)/Observations"
+            }
+        ]
+    }
+}
+```
+
+Possible values for dataType:
+Temperature, Humidity, Noise, Pressure, CO2,
+
+fetchIntervalSeconds:
+Not mandatory, defaults to 600 seconds (Unable to get faster readings from Netatmo API)
+
+### BeeClear
 ToDo
