@@ -6,6 +6,7 @@ import (
 
 	"github.com/tebben/sensorthings-connector/src/connector/config"
 	"github.com/tebben/sensorthings-connector/src/connector/http"
+	"github.com/tebben/sensorthings-connector/src/connector/modules/beeclear"
 	"github.com/tebben/sensorthings-connector/src/connector/modules/mqtt"
 	"github.com/tebben/sensorthings-connector/src/connector/modules/netatmo"
 	"github.com/tebben/sensorthings-connector/src/connector/system"
@@ -31,6 +32,7 @@ func start(c config.Config) {
 	//---ADD MODULES HERE---//
 	system.AddModule(&mqtt.MQTTModule{})
 	system.AddModule(&netatmo.NetatmoModule{})
+	system.AddModule(&beeclear.BeeClearModule{})
 	//----------------------//
 
 	system.Start()
