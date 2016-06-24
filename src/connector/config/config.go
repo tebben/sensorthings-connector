@@ -14,6 +14,7 @@ type Config struct {
 	HttpHost  string           `json:"httpHost"`
 	PubClient models.PubClient `json:"publishClient"`
 	PubBroker models.PubBroker `json:"publishBroker"`
+	Database  string           `json:"database"`
 }
 
 // readFile reads the bytes from a given file

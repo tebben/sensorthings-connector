@@ -22,6 +22,7 @@ type SensorThingsConnector struct {
 	pubChannel    chan *models.PublishMessage
 	pubClient     mqtt.MqttPubClient
 	db            database.Database
+	dbLocation    string
 }
 
 // CreateSystem initialises a new SensorThings System
@@ -35,6 +36,7 @@ func CreateSystem(config config.Config) models.System {
 		pubChannel:   pubChan,
 		pubClient:    pubClient,
 		db:           database.Database{},
+		dbLocation:   config.Database,
 	}
 }
 
@@ -43,7 +45,7 @@ func (sc *SensorThingsConnector) Start() {
 	sc.restEndpoints = rest.CreateEndPoints()
 	sc.pubClient.Start()
 	// Load connectors from database
-	sc.db.Open()
+	sc.db.Open(sc.dbLocation)
 	connectors, err := sc.db.GetConnectors()
 	if err != nil {
 		log.Printf("%v", err.Error())

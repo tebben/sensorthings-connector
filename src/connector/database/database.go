@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"path"
-	"runtime"
 	"time"
 
 	"github.com/boltdb/bolt"
@@ -13,17 +11,15 @@ import (
 )
 
 var open bool
-var dbName = "st_connector.db"
 var connectorBucketName = "connectors"
 
 type Database struct {
 	bolt *bolt.DB
 }
 
-func (db *Database) Open() error {
+func (db *Database) Open(dbPath string) error {
 	var err error
-	_, filename, _, _ := runtime.Caller(0) // get full path of this file
-	dbFile := path.Join(path.Dir(filename), dbName)
+	dbFile := dbPath
 	config := &bolt.Options{Timeout: 1 * time.Second}
 	db.bolt, err = bolt.Open(dbFile, 0600, config)
 	if err != nil {

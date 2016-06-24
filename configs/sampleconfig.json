@@ -10,5 +10,6 @@
       "host": "tcp://gost.geodan.nl:1883",
       "username": "",
       "password": ""
-  }
+  },
+  "database": "C:/Users/time/Documents/st_connector.db"
 }
