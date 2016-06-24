@@ -40,7 +40,7 @@ type Mapping struct {
 func (nm *NetatmoModule) Setup() {
 	nm.Name = "Netatmo"
 	nm.Description = "Publish Netatmo readings to a SensorThings server"
-	nm.fetchInterval = 10
+	nm.fetchInterval = 600
 }
 
 // Start receiving Netatmo readings and publish it to a SensorThings server
