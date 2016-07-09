@@ -52,7 +52,7 @@ STATUS: 200 OK
 
 <b>Create new connector</b>
 ```
-GET: http://localhost:8081/Connectors
+POST: http://localhost:8081/Connectors
 Body: {
          "name": "{connector name}",
          "description": "{connector description}",
